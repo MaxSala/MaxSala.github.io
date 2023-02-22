@@ -17,6 +17,17 @@
                     "- Rule n2",
                     "- Rule n3"
                 ]
+            },
+            {
+                "title": "Server Rules",
+                "list": [
+                    "Rule n1",
+                    "Rule n2",
+                    "Rule n3",
+                    "ㅤㅤㅤㅤ",
+                    "- Rule n2",
+                    "- Rule n3"
+                ]
             }
         ]
     }
