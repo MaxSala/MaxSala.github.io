@@ -1,0 +1,23 @@
+{
+    "text": {
+        "info": {
+
+        },
+        "changelog": {
+
+        },
+        "rules": {
+            {
+                "title": "Discord Rules",
+                "list": [
+                    "Rule n1",
+                    "Rule n2",
+                    "Rule n3",
+                    "ㅤㅤㅤㅤ",
+                    "- Rule n2",
+                    "- Rule n3"
+                ]
+            }
+        }
+    }
+}
