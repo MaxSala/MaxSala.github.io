@@ -66,11 +66,18 @@
       function connectServer() {
         const button = document.getElementById('connectButton');
         button.classList.add('disabled');
-        window.location.href = 'fivem://connect/mc.forseti.es:30120';
-        setTimeout(() => {
-          // Cerrar la ventana después de un breve retraso (ajusta el valor según sea necesario)
-          window.close();
-        }, 1000); // Cierra la ventana después de 1 segundo
+        
+        // Abre la aplicación y espera a que el usuario acepte
+        const popupWindow = window.open('fivem://connect/mc.forseti.es:30120', '_blank');
+        
+        const checkPopupClosed = setInterval(() => {
+          if (popupWindow.closed) {
+            clearInterval(checkPopupClosed);
+            
+            // Cerrar la ventana actual después de que el usuario haya aceptado
+            window.close();
+          }
+        }, 500); // Comprueba cada 0.5 segundos si la ventana emergente se ha cerrado
       }
    </script>
 </html>
