@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento Fibonacci</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .tracker-container {
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        input[type="number"] {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .fib-bar {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+
+        .fib-bar::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .fib-bar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        .fib-bar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .fib-item {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            min-width: 50px;
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .fib-item.current {
+            background-color: #ffd700;
+            color: #000;
+            font-weight: bold;
+        }
+
+        #add-tracker {
+            background-color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        #add-tracker:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <button id="add-tracker">Agregar barra de seguimiento</button>
+    <div id="trackers"></div>
+
+    <script>
+        function createFibonacciTracker() {
+            const trackerContainer = document.createElement('div');
+            trackerContainer.classList.add('tracker-container');
+
+            // Controls
+            const controls = document.createElement('div');
+            controls.classList.add('controls');
+
+            const baseInput = document.createElement('input');
+            baseInput.type = 'number';
+            baseInput.step = "0.01";
+            baseInput.placeholder = 'Base de apuesta';
+
+            const winButton = document.createElement('button');
+            winButton.textContent = 'Ganar';
+
+            const loseButton = document.createElement('button');
+            loseButton.textContent = 'Perder';
+
+            controls.appendChild(baseInput);
+            controls.appendChild(winButton);
+            controls.appendChild(loseButton);
+
+            // Fibonacci Bar
+            const fibBar = document.createElement('div');
+            fibBar.classList.add('fib-bar');
+
+            function generateFibonacci(base) {
+                const fibonacci = [parseFloat(base), parseFloat(base)];
+                for (let i = 2; i < 15; i++) {
+                    fibonacci.push(parseFloat(fibonacci[i - 1]) + parseFloat(fibonacci[i - 2]));
+                }
+                return fibonacci;
+            }
+
+            function updateFibonacci(base) {
+                const fibonacci = generateFibonacci(base);
+                fibBar.innerHTML = '';
+                fibonacci.forEach((num, index) => {
+                    const fibItem = document.createElement('div');
+                    fibItem.classList.add('fib-item');
+                    fibItem.textContent = num.toFixed(2);
+                    fibItem.dataset.index = index;
+                    if (index === currentIndex) fibItem.classList.add('current');
+                    fibBar.appendChild(fibItem);
+                });
+            }
+
+            let currentIndex = 0;
+            updateFibonacci(1);
+
+            baseInput.addEventListener('input', () => {
+                const baseValue = parseFloat(baseInput.value) || 1;
+                updateFibonacci(baseValue);
+            });
+
+            function updateCurrent(index) {
+                const items = fibBar.querySelectorAll('.fib-item');
+                items.forEach(item => item.classList.remove('current'));
+                items[index].classList.add('current');
+                items[index].scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            }
+
+            winButton.addEventListener('click', () => {
+                if (currentIndex > 1) {
+                    currentIndex -= 2;
+                } else {
+                    currentIndex = 0;
+                }
+                updateCurrent(currentIndex);
+            });
+
+            loseButton.addEventListener('click', () => {
+                if (currentIndex < fibBar.children.length - 1) {
+                    currentIndex++;
+                    updateCurrent(currentIndex);
+                }
+            });
+
+            trackerContainer.appendChild(controls);
+            trackerContainer.appendChild(fibBar);
+
+            return trackerContainer;
+        }
+
+        document.getElementById('add-tracker').addEventListener('click', () => {
+            const trackers = document.getElementById('trackers');
+            trackers.appendChild(createFibonacciTracker());
+        });
+
+        // Initialize with one tracker
+        document.getElementById('add-tracker').click();
+    </script>
+</body>
+</html>
